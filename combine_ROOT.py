@@ -1,5 +1,4 @@
 import ROOT
-import re
 
 def compare_and_modify_histograms(file1, file2, file3, output_root_file, modified_output_root_file):
     # X-axis labels based on histogram keywords
