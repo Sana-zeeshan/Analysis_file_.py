@@ -12,16 +12,6 @@ def compare_and_modify_histograms(file1, file2, file3, output_root_file, modifie
         "Et": "Rest Energy [GeV]"
     }
 
-    particle_labels = {
-        "higgs": "Higgs Boson (h1)",
-        "xd": "Dark Matter (xd)",
-        "xd_": "Anti-Dark Matter (xd~)",
-        "xd_xd": "DM-(Anti DM)",
-        "ps_a": "Pseudoscalar (a)",
-        "ps_A": "Heavy Pseudoscalar (A)",
-        "bj": "Bottom Quark Jet",
-        "bj_": "Bottom Anti_Quark Jet",
-    }
 
     extra_params = [
         "M_{a} = 500 GeV",
@@ -139,29 +129,22 @@ def compare_and_modify_histograms(file1, file2, file3, output_root_file, modifie
             latex.SetTextFont(43)
             latex.SetTextSize(20)
             latex.SetTextAlign(13)
+            latex.DrawLatex(0.16, 0.94, f"{hist_name}")
 
 # Start near the top-left, outside plotting frame
-            x_pos = 0.16
+            x_pos = 0.40
             y_pos = 0.94
-
-# First draw particle label
-            for key, label in particle_labels.items():
-                if key in hist_name:
-                    latex.DrawLatex(x_pos, y_pos, label)
-                    x_pos += 0.29   # shift right for next text block
-                    break
 
 # Then draw all extra params on the same row
             for param in extra_params:
                 latex.DrawLatex(x_pos, y_pos, param)
-                x_pos += 0.20  # move further right each time
-
-            
-            
-           
-
+                x_pos += 0.25  # move further right each time
+            # Process title centered above everything
+            #latex.SetTextSize(22)
+            #latex.SetTextAlign(23)  # center alignment
+            #latex.DrawLatex(0.5, 0.9, "g g > h_{1} x_{d} x_{d}~")
             # Legend
-            legend = ROOT.TLegend(0.70, 0.70, 0.78, 0.85)
+            legend = ROOT.TLegend(0.70, 0.70, 0.76, 0.85)
             legend.SetBorderSize(0)
             legend.SetTextFont(43)
             legend.SetTextSize(20)
@@ -204,7 +187,7 @@ def compare_and_modify_histograms(file1, file2, file3, output_root_file, modifie
         c.SetBottomMargin(0.15)
         c.SetTicks(1, 1)
 
-        c.Print("output_tan_norm.pdf[")
+        #c.Print("output_tan_norm.pdf[")
 
         for key in keys:
             obj_name = key.GetName()
@@ -232,8 +215,8 @@ def compare_and_modify_histograms(file1, file2, file3, output_root_file, modifie
 
                     canvas.SetCanvasSize(800, 800)
                     canvas.SetWindowSize(900, 900)
-                    primitive.GetXaxis().SetTitleOffset(1.3)
-                    primitive.GetYaxis().SetTitleOffset(1.5)
+                    primitive.GetXaxis().SetTitleOffset(1.2)
+                    primitive.GetYaxis().SetTitleOffset(1.0)
                     primitive.GetXaxis().SetLabelSize(0.04)
                     primitive.GetYaxis().SetLabelSize(0.04)
                     primitive.GetXaxis().SetTitleSize(0.045)
@@ -278,10 +261,14 @@ def compare_and_modify_histograms(file1, file2, file3, output_root_file, modifie
 
             canvas.Update()
             canvas.Write()
-            canvas.Print("output_tan_norm.pdf")  # add one page to PDF
+            #canvas.Print("output_tan_norm.pdf")  # add one page to PDF
 
         # Close multipage PDF
-        c.Print("output_tan_norm.pdf]")
+        #c.Print("output_tan_norm.pdf]")
+        #save each canvas in its own pdf
+            pdf_filename = f"{obj_name}.pdf"
+            canvas.Print(pdf_filename)
+            print(f"Saved separate PDF: {pdf_filename}")
 
         input_file.Close()
         output_file.Close()
@@ -298,7 +285,6 @@ if __name__ == "__main__":
         "../bin/template_gg_h1xdxd_sin/Events/run_06_decayed_1/unweighted_events.root",
         "../bin/template_gg_h1xdxd_sin/Events/run_14_decayed_1/unweighted_events.root",
         "../bin/template_gg_h1xdxd_sin/Events/run_15_decayed_1/unweighted_events.root",
-        "histogram_tan_comparison.root",
-        "modified_histogram_tan_comparison.root"
+        "histogram_tan_comparison_tan.root",
+        "modified_histogram_tan_comparison_tan.root"
     )
-
